@@ -43,3 +43,8 @@ Thumbs.db
 
 # Nx files
 .nx
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "project-n-9ca70": {
+      "hosting": {
+        "project-n": [
+          "project-n-9ca70"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "project-n-9ca70"
+  }
+}
