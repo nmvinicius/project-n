@@ -1,0 +1,8 @@
+<nav>
+    @if(isLoggedIn()) {
+        <a href="logout">Logout</a>
+        <img src={{avatarUrl}} alt="">
+    } @else {
+        <a href="login">Login</a>
+    }
+</nav>

@@ -1,0 +1,25 @@
+nav {
+    a {
+        &:hover {
+            color: #01fefe;
+            text-shadow: 0 0 10px #01fefe;
+        }
+
+        &:after {
+            content: '';
+            bottom: -25px;
+            height: 0;
+            width: 10px;
+            left: 50%;
+            position: absolute;
+            background-color: #01fefe;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        &:hover:after {
+            height: 10px;
+            left: 50%;
+        }
+    }
+}
