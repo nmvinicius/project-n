@@ -16,14 +16,10 @@ export class NavigationComponent {
 
 
   logout() {
-    this.authService.logout();
+    this.authService.signOut();
   }
 
   isLoggedIn() {
-    return this.authService.isLoggedIn();
-  }
-
-  get avatarUrl() {
-    return this.authService.avatarUrl;
+    return this.authService.isSignedIn();
   }
 }

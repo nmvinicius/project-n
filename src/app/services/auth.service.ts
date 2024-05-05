@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
+import { Auth, GoogleAuthProvider, signInWithRedirect, User, getRedirectResult, onAuthStateChanged, getIdTokenResult } from '@angular/fire/auth';
+import { browserLocalPersistence, setPersistence } from 'firebase/auth';
 import { Router } from '@angular/router';
-import { Auth, GoogleAuthProvider, User } from '@angular/fire/auth';
-import { user, signInWithRedirect, getRedirectResult } from '@angular/fire/auth';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  user$ = user(this.auth);
   currentUser: User | null = null;
 
   constructor(private auth: Auth, private router: Router) {
-    this.handleRedirectResult();
+    setPersistence(this.auth, browserLocalPersistence);
+    this.initializeAuthStateListener();
+  }
+
+  private initializeAuthStateListener() {
+    onAuthStateChanged(
+      this.auth, 
+      user => {
+        this.currentUser = user;
+        if (user) {
+          this.router.navigateByUrl('/');
+        }
+      },
+      error => console.error(error)
+    );
   }
 
   private async handleRedirectResult() {
@@ -30,29 +42,30 @@ export class AuthService {
       this.router.navigateByUrl('/login');
     }
   }
-
-  async loginWithGoogle() {
+    
+  async googleSignIn() {
     try {
       await signInWithRedirect(this.auth, new GoogleAuthProvider());
     } catch (error) {
       console.error('Error logging in with Google:', error);
     }
   }
+  
+  signOut() {
+    this.auth.signOut();
+    this.currentUser = null;
+    this.router.navigateByUrl('/login');
+  }
 
-  async logout() {
+  async isSignedIn() {
     try {
-      await this.auth.signOut();
-      this.router.navigateByUrl('/login');
+      if (!this.currentUser) return false;
+      const expiryDate = new Date((await getIdTokenResult(this.currentUser)).expirationTime);
+      if (expiryDate < new Date()) return false;
+      return true;
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error('Error checking if user is signed in:', error);
+      return false;
     }
-  }
-
-  isLoggedIn() {
-    return this.currentUser !== null;
-  }
-
-  get avatarUrl() {
-    return this.currentUser?.photoURL;
   }
 }

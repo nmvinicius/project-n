@@ -15,6 +15,6 @@ export class LoginComponent {
   ) {}
 
   async loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.authService.googleSignIn();
   }
 }
