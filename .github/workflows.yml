@@ -1,0 +1,47 @@
+name: Git Flow Actions
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'bugfix/*'
+      - 'release/*'
+      - 'hotfix/*'
+      - 'support/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Feature finish
+      run: |
+        git checkout develop
+        git flow feature finish ${GITHUB_REF#refs/heads/feature/}
+
+    - name: Bugfix finish
+      run: |
+        git checkout develop
+        git flow bugfix finish ${GITHUB_REF#refs/heads/bugfix/}
+
+    - name: Release finish
+      run: |
+        git checkout main
+        git flow release finish ${GITHUB_REF#refs/heads/release/}
+
+    - name: Hotfix finish
+      run: |
+        git checkout main
+        git flow hotfix finish ${GITHUB_REF#refs/heads/hotfix/}
+
+    - name: Support finish
+      run: |
+        git checkout main
+        git flow support finish ${GITHUB_REF#refs/heads/support/}
+
+    - name: Push changes
+      run: |
+        git push origin develop
+        git push origin main
